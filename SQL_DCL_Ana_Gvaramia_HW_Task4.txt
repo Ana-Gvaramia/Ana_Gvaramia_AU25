@@ -1,0 +1,31 @@
+1. How can one restrict access to certain columns of a database table?
+
+There are two main methods:
+- Column-Level Privileges (DCL) - Grant SELECT, INSERT, or UPDATE permissions only for a specified list of columns directly on the table.
+- Using Views - Create a virtual table (View) that includes only the allowed columns. Users are then granted privileges solely on this View, not the underlying table.
+
+2. What is the difference between user identification and user authentication?
+
+User Identification -
+Goal: To state who the user claims to be
+Input: Username (role name) provided during connection
+Result: Establishes the current_user session
+
+User Authentication -
+Goal: To prove the identity
+Input: Password, token, or certificate presented
+Result: Grants or denies connection access
+
+3. What are the recommended authentication protocols for PostgreSQL?
+
+SCRAM-SHA-256: The industry standard for password authentication. It uses modern hashing and salting to prevent cleartext transmission and protect against rainbow table attacks
+
+Certificates: Highly secure method where the client presents a cryptographic certificate. It eliminates passwords, binding identity to a private key
+
+GSSAPI: Recommended for integrating PostgreSQL with centralized corporate directory services
+
+4. What is proxy authentication in PostgreSQL, and what is it for? Why does it make RBAC easier to implement?
+
+Proxy authentication is when an application connects to PostgreSQL using a single, high-privileged proxy role. It is used primarily for reducing connection overhead and centralizing authentication.
+
+Proxy authentication is essential for making Role-Based Access Control (RBAC) effective. By using SET ROLE, the database's current_user variable is correctly set to the end-user's identity. The database session, while persistent, operates under the minimal permissions of the end-user's role, greatly enhancing security over using the single high-privileged proxy role for all actions.
